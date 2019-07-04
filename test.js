@@ -10,7 +10,7 @@ import fkill from '.';
 
 async function noopProcessKilled(t, pid) {
 	// Ensure the noop process has time to exit
-	await delay(100);
+	await delay(200);
 	t.false(await processExists(pid));
 }
 
@@ -76,7 +76,8 @@ test.serial('don\'t kill self', async t => {
 
 test.serial('don\'t kill `fkill` when killing `node`', async t => {
 	const originalFkillPid = process.pid;
-	await fkill('node');
+	const name = process.platform === 'win32' ? 'node.exe' : 'node';
+	await fkill(name);
 
 	t.true(await processExists(originalFkillPid));
 });
